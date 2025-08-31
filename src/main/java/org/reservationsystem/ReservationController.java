@@ -14,6 +14,7 @@ import static org.reservationsystem.CustomColoriOutput.ANSI_CYAN;
 import static org.reservationsystem.CustomColoriOutput.ANSI_RESET;
 
 @RestController
+@RequestMapping("/reservation")
 public class ReservationController {
     private final Logger logger = LoggerFactory.getLogger(ReservationController.class);
     private final ReservationService reservationService;
@@ -31,7 +32,7 @@ public class ReservationController {
                 .body(reservationService.getReservationByID(id));
     }
 
-    @GetMapping("/all")
+    @GetMapping()
     public ResponseEntity<List<Reservation>> getAllReservations() {
         logger.info(ANSI_CYAN + "Вызвался метод getAllReservations" + ANSI_RESET);
         return ResponseEntity.status(HttpStatus.OK)
