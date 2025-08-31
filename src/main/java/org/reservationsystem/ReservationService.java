@@ -5,46 +5,64 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class ReservationService {
 
-    private final Map<Long, Reservation> reservationMap = Map.of(
-            1L, new Reservation(
-                    1L,
-                    100L,
-                    40L,
-                    LocalDate.now(),
-                    LocalDate.now().plusDays(5),
-                    ReservationStatus.APPROVED
-            ),
-            2L, new Reservation(
-                    2L,
-                    101L,
-                    40L,
-                    LocalDate.now(),
-                    LocalDate.now().plusDays(5),
-                    ReservationStatus.APPROVED
-            ),
-            3L, new Reservation(
-                    3L,
-                    102L,
-                    40L,
-                    LocalDate.now(),
-                    LocalDate.now().plusDays(5),
-                    ReservationStatus.APPROVED
-            ));
+    private final List<Reservation> reservations = new ArrayList<>();
+    {
+        reservations.add(new Reservation(
+                1L,
+                100L,
+                40L,
+                LocalDate.now(),
+                LocalDate.now().plusDays(5),
+                ReservationStatus.APPROVED));
+
+        reservations.add(new Reservation(
+                2L,
+                100L,
+                40L,
+                LocalDate.now(),
+                LocalDate.now().plusDays(5),
+                ReservationStatus.APPROVED));
+
+        reservations.add(new Reservation(
+                3L,
+                100L,
+                40L,
+                LocalDate.now(),
+                LocalDate.now().plusDays(5),
+                ReservationStatus.APPROVED));
+    }
 
     public Optional<Reservation> getReservationByID(Long id) {
-        return reservationMap.values()
-                .stream()
+        return reservations.stream()
                 .filter(r -> r.id().equals(id))
                 .findFirst();
     }
 
     public List<Reservation> getAllReservation(){
-        return new ArrayList<>(reservationMap.values());
+        return reservations;
+    }
+
+    public Reservation createReservation(Reservation newReservation) {
+        long index = reservations.getLast().id();
+        if(newReservation.id() != null) {
+            throw new IllegalArgumentException("Reservation ID must not be null");
+        }
+        if(newReservation.status() != null) {
+            throw new IllegalArgumentException("Reservation status must not be null");
+        }
+        var res =  new Reservation(index + 1,
+                newReservation.userID(),
+                newReservation.roomID(),
+                newReservation.startDate(),
+                newReservation.endDate(),
+                ReservationStatus.APPROVED
+        );
+        reservations.add(res);
+        return res;
     }
 }

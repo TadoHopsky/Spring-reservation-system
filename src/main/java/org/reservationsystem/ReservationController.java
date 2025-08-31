@@ -3,9 +3,7 @@ package org.reservationsystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,5 +30,11 @@ public class ReservationController {
     public List<Reservation> getAllReservations() {
         logger.info("Вызвался метод getAllReservations");
         return reservationService.getAllReservation();
+    }
+
+    @PostMapping()
+    public Reservation createReservation(@RequestBody Reservation newReservation) {
+        logger.info("Создание нового объекта Reservation");
+        return reservationService.createReservation(newReservation);
     }
 }
