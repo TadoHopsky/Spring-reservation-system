@@ -16,12 +16,14 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @Autowired
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(
+            ReservationService reservationService) {
         this.reservationService = reservationService;
     }
 
     @GetMapping("/{id}")
-    public Optional<Reservation> getReservationByID(@PathVariable("id") Long id) {
+    public Optional<Reservation> getReservationByID(
+            @PathVariable("id") Long id) {                             // Получение ID через GET запрос
         logger.info("Вызвался метод getReservationByID с ID {}", id);
         return reservationService.getReservationByID(id);
     }
