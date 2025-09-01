@@ -66,4 +66,43 @@ public class ReservationService {
         reservations.add(res);
         return res;
     }
+
+    public Reservation updateReservation(Long id, Reservation newReservation) {
+        var index = -1;
+        for (int i = 0; i < reservations.size(); i++) {
+            if (reservations.get(i).id().equals(id)) {
+                index = i;
+                break;
+            }
+        }
+        if (index == -1) {throw new IllegalArgumentException("Бронирование с id=" + id + " не найдено");}
+
+        var defaultReservation = reservations.get(index);
+
+        if (defaultReservation.status() != ReservationStatus.APPROVED) {
+            throw new IllegalArgumentException(
+                    "Нельзя обновить бронирование, пока оно не находится в обработке. " +
+                            "Статус бронирования: " + defaultReservation.status()
+            );
+        }
+        var updatedReservation = new Reservation(
+                defaultReservation.id(),
+                newReservation.userID(),
+                newReservation.roomID(),
+                newReservation.startDate(),
+                newReservation.endDate(),
+                ReservationStatus.APPROVED
+        );
+        reservations.set(index, updatedReservation);
+        return updatedReservation;
+    }
+
+    public Reservation deleteReservationByID(Long id) {
+        Reservation removedReservation = reservations.stream()
+                .filter(r -> r.id().equals(id))
+                .findFirst()
+                .orElse(null);
+        reservations.remove(removedReservation);
+        return removedReservation;
+    }
 }

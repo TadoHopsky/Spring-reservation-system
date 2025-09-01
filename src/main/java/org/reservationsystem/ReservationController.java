@@ -40,9 +40,24 @@ public class ReservationController {
     }
 
     @PostMapping()
-    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation newReservation) {
+    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservationToCreate) {
         logger.info(ANSI_CYAN + "Создание нового объекта Reservation" + ANSI_RESET);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(reservationService.createReservation(newReservation));
+                .body(reservationService.createReservation(reservationToCreate));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Reservation> updateReservation(@PathVariable("id") Long id,
+                                                         @RequestBody Reservation reservationToUpdate) {
+        logger.info(ANSI_CYAN + "Обновления данных ..." + ANSI_RESET);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(reservationService.updateReservation(id, reservationToUpdate));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Reservation> deleteReservation(@PathVariable("id") Long id) {
+        logger.info(ANSI_CYAN + "Удаление пользователя с ID: {}" + ANSI_RESET, id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(reservationService.deleteReservationByID(id));
     }
 }
